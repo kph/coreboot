@@ -1,2 +1,2 @@
 config BOARD_PLATINA_MK1
-	bool "Platina MK1 Cluster Head"
+	bool "MK1 Cluster Head"
