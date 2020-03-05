@@ -1,2 +1,2 @@
 config BOARD_PLATINA_MK1
-	bool "MK1 Cluster Head"
+	bool "DC-MK1-1 Daughter Card"

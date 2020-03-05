@@ -17,7 +17,7 @@ config MAINBOARD_DIR
 
 config MAINBOARD_PART_NUMBER
 	string
-	default "MK1 Cluster Head"
+	default "DC-MK1-1"
 
 config IRQ_SLOT_COUNT
 	int
