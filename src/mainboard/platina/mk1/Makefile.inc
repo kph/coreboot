@@ -13,4 +13,4 @@
 ## GNU General Public License for more details.
 ##
 
-ramstage-y += irqroute.c platina_bdxde.c
+ramstage-y += irqroute.c
