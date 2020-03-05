@@ -27,7 +27,6 @@
 #if CONFIG(VGA_ROM_RUN)
 #include <x86emu/x86emu.h>
 #endif
-#include "mainboard.h"
 
 /*
  * mainboard_enable is executed as first thing after enumerate_buses().
@@ -41,7 +40,7 @@ static void mainboard_enable(struct device *dev)
 #define DEFAULT_GPIOBASE 0x0500
 
 
-void mainboard_init(void *ignored)
+static void mainboard_init(void *ignored)
 {
         struct device *c_dev;
         uint32_t reg32;
