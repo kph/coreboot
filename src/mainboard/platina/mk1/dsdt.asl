@@ -374,7 +374,7 @@ DefinitionBlock(
                 	     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
                 	     Package () {
                              	     Package () { "compatible", "linux,onie" },
-				     Package () { "nvmem-cells", Package() { ^NVM0 } },
+				     Package () { "nvmem-cells", Package() { NVM0 } },
 				     Package () { "nvmem-cell-names", Package() { "onie-data" } },
                 	     }
         		})
@@ -387,7 +387,7 @@ DefinitionBlock(
                 	     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
                 	     Package () {
                              	     Package () { "compatible", "linux,onie" },
-				     Package () { "nvmem-cells", Package() { ^NVM1 } },
+				     Package () { "nvmem-cells", Package() { NVM1 } },
 				     Package () { "nvmem-cell-names", Package() { "onie-data" } },
                 	     }
         		})
