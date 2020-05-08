@@ -554,10 +554,22 @@ DefinitionBlock(
 				{
 					Name (_HID, "PRP0001")
         				Name (_DSD, Package() {
-                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-                	     		     Package () {
-						     Package () { "compatible", "nxp,pca9555" },
-                	     		     }
+						ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+						Package () {
+							Package () { "compatible", "nxp,pca9555" },
+							Package () { "gpio-line-names",
+								Package () {
+									"PORT0_ABS",  "PORT1_ABS", 
+						    			"PORT2_ABS",  "PORT3_ABS", 
+									"PORT4_ABS",  "PORT5_ABS", 
+									"PORT6_ABS",  "PORT7_ABS", 
+						 			"PORT8_ABS",  "PORT9_ABS",
+									"PORT10_ABS",  "PORT11_ABS",
+									"PORT12_ABS",  "PORT13_ABS",
+									"PORT14_ABS",  "PORT15_ABS"
+								}
+							}
+						}
 					})
 
 					Name (_CRS, ResourceTemplate () {
@@ -572,10 +584,22 @@ DefinitionBlock(
 				{
 					Name (_HID, "PRP0001")
         				Name (_DSD, Package() {
-                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-                	     		     Package () {
-						     Package () { "compatible", "nxp,pca9555" },
-                	     		     }
+						ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+						Package () {
+							Package () { "compatible", "nxp,pca9555" },
+							Package () { "gpio-line-names",
+								Package () {
+									"PORT16_ABS",  "PORT17_ABS", 
+						    			"PORT18_ABS",  "PORT19_ABS", 
+									"PORT20_ABS",  "PORT21_ABS", 
+									"PORT22_ABS",  "PORT23_ABS", 
+						 			"PORT24_ABS",  "PORT25_ABS",
+									"PORT26_ABS",  "PORT27_ABS",
+									"PORT28_ABS",  "PORT29_ABS",
+									"PORT30_ABS",  "PORT31_ABS"
+								}
+							}
+						}
 					})
 
 					Name (_CRS, ResourceTemplate () {
@@ -590,9 +614,21 @@ DefinitionBlock(
 				{
 					Name (_HID, "PRP0001")
         				Name (_DSD, Package() {
-                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-                	     		     Package () {
-						     Package () { "compatible", "nxp,pca9555" },
+						ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+						Package () {
+							Package () { "compatible", "nxp,pca9555" },
+							Package () { "gpio-line-names",
+								Package () {
+									"PORT0_INT_L",  "PORT1_INT_L", 
+						    			"PORT2_INT_L",  "PORT3_INT_L", 
+									"PORT4_INT_L",  "PORT5_INT_L", 
+									"PORT6_INT_L",  "PORT7_INT_L", 
+						 			"PORT8_INT_L",  "PORT9_INT_L",
+									"PORT10_INT_L",  "PORT11_INT_L",
+									"PORT12_INT_L",  "PORT13_INT_L",
+									"PORT14_INT_L",  "PORT15_INT_L"
+								}
+							}
                 	     		     }
 					})
 
@@ -608,10 +644,22 @@ DefinitionBlock(
 				{
 					Name (_HID, "PRP0001")
         				Name (_DSD, Package() {
-                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-                	     		     Package () {
-						     Package () { "compatible", "nxp,pca9555" },
-                	     		     }
+						ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+						Package () {
+							Package () { "compatible", "nxp,pca9555" },
+							Package () { "gpio-line-names",
+								Package () {
+									"PORT16_INT_L",  "PORT17_INT_L", 
+						    			"PORT18_INT_L",  "PORT19_INT_L", 
+									"PORT20_INT_L",  "PORT21_INT_L", 
+									"PORT22_INT_L",  "PORT23_INT_L", 
+						 			"PORT24_INT_L",  "PORT25_INT_L",
+									"PORT26_INT_L",  "PORT27_INT_L",
+									"PORT28_INT_L",  "PORT29_INT_L",
+									"PORT30_INT_L",  "PORT31_INT_L"
+								}
+							}
+						}
 					})
 
 					Name (_CRS, ResourceTemplate () {
@@ -631,9 +679,21 @@ DefinitionBlock(
 				{
 					Name (_HID, "PRP0001")
         				Name (_DSD, Package() {
-                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-                	     		     Package () {
-						     Package () { "compatible", "nxp,pca9555" },
+						ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+						Package () {
+							Package () { "compatible", "nxp,pca9555" },
+							Package () { "gpio-line-names",
+								Package () {
+									"PORT0_LPMODE",  "PORT1_LPMODE", 
+						    			"PORT2_LPMODE",  "PORT3_LPMODE", 
+									"PORT4_LPMODE",  "PORT5_LPMODE", 
+									"PORT6_LPMODE",  "PORT7_LPMODE", 
+						 			"PORT8_LPMODE",  "PORT9_LPMODE",
+									"PORT10_LPMODE",  "PORT11_LPMODE",
+									"PORT12_LPMODE",  "PORT13_LPMODE",
+									"PORT14_LPMODE",  "PORT15_LPMODE"
+								}
+							}
                 	     		     }
 					})
 
@@ -649,10 +709,22 @@ DefinitionBlock(
 				{
 					Name (_HID, "PRP0001")
         				Name (_DSD, Package() {
-                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-                	     		     Package () {
-						     Package () { "compatible", "nxp,pca9555" },
-                	     		     }
+						ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+						Package () {
+							Package () { "compatible", "nxp,pca9555" },
+							Package () { "gpio-line-names",
+								Package () {
+									"PORT16_LPMODE",  "PORT17_LPMODE", 
+						    			"PORT18_LPMODE",  "PORT19_LPMODE", 
+									"PORT20_LPMODE",  "PORT21_LPMODE", 
+									"PORT22_LPMODE",  "PORT23_LPMODE", 
+						 			"PORT24_LPMODE",  "PORT25_LPMODE",
+									"PORT26_LPMODE",  "PORT27_LPMODE",
+									"PORT28_LPMODE",  "PORT29_LPMODE",
+									"PORT30_LPMODE",  "PORT31_LPMODE"
+								}
+							}
+						}
 					})
 
 					Name (_CRS, ResourceTemplate () {
@@ -667,10 +739,22 @@ DefinitionBlock(
 				{
 					Name (_HID, "PRP0001")
         				Name (_DSD, Package() {
-                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-                	     		     Package () {
-						     Package () { "compatible", "nxp,pca9555" },
-                	     		     }
+						ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     			Package () {
+							Package () { "compatible", "nxp,pca9555" },
+							Package () { "gpio-line-names",
+								Package () {
+									"PORT0_RST_L",  "PORT1_RST_L", 
+						    			"PORT2_RST_L",  "PORT3_RST_L", 
+									"PORT4_RST_L",  "PORT5_RST_L", 
+									"PORT6_RST_L",  "PORT7_RST_L", 
+						 			"PORT8_RST_L",  "PORT9_RST_L",
+									"PORT10_RST_L",  "PORT11_RST_L",
+									"PORT12_RST_L",  "PORT13_RST_L",
+									"PORT14_RST_L",  "PORT15_RST_L"
+								}
+							}
+						}
 					})
 
 					Name (_CRS, ResourceTemplate () {
@@ -685,10 +769,22 @@ DefinitionBlock(
 				{
 					Name (_HID, "PRP0001")
         				Name (_DSD, Package() {
-                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-                	     		     Package () {
-						     Package () { "compatible", "nxp,pca9555" },
-                	     		     }
+						ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+						Package () {
+							Package () { "compatible", "nxp,pca9555" },
+ 							Package () { "gpio-line-names",
+								Package () {
+									"PORT16_RST_L",  "PORT17_RST_L", 
+						    			"PORT18_RST_L",  "PORT19_RST_L", 
+									"PORT20_RST_L",  "PORT21_RST_L", 
+									"PORT22_RST_L",  "PORT23_RST_L", 
+						 			"PORT24_RST_L",  "PORT25_RST_L",
+									"PORT26_RST_L",  "PORT27_RST_L",
+									"PORT28_RST_L",  "PORT29_RST_L",
+									"PORT30_RST_L",  "PORT31_RST_L"
+								}
+							}
+						}
 					})
 
 					Name (_CRS, ResourceTemplate () {
@@ -699,16 +795,28 @@ DefinitionBlock(
 					})
 				}
 			}
-
 		}
+
 		Device (GPIO)
 		{
 			Name (_HID, "PRP0001")
         		Name (_DSD, Package() {
-                	     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-                	     Package () {
-                             	     Package () { "compatible", "nxp,pca9539" },
-                	     }
+				ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+				Package () {
+					Package () { "compatible", "nxp,pca9539" },
+ 					Package () { "gpio-line-names",
+						Package () {
+							"TH_RST_L", "TH_PCIE_RST_L", 
+							"LED_CLR", "HOST_TO_BMC_I2C", 
+							"UART_MUX_SEL", "USB_MUX_SEL", 
+							"TH_CLK_FSEL_0", "TH_CLK_FSEL_1", 
+						 	"TH_INT_L", "QSFP_GPIO0_INT_L",
+							"QSFP_GPIO1_INT_L", "QSFP_GPIO2_INT_L",
+							"QSFP_GPIO3_INT_L", "TH_CLK_SEL",
+							"I210_RST_L", "I210_PE_RST_L"
+						}
+					}
+				}
         		})
         		Name (_CRS, ResourceTemplate ()
 			{
