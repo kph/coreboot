@@ -436,5 +436,287 @@ DefinitionBlock(
                 		Return (SBUF)
         		}
 		}
-	}	
+
+		Device (MUX0)
+		{
+			Name (_HID, "PRP0001")
+        		Name (_DSD, Package() {
+                	     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     Package () {
+                             	     Package () { "compatible", "nxp,pca9548" },
+                	     }
+        		})
+        		Name (_CRS, ResourceTemplate()
+			{
+				I2cSerialBus (0x70, ControllerInitiated,
+                                		     400000, AddressingMode7Bit,
+                                		     "\\_SB.PCI0.SBUS", 0x00,
+                                		     ResourceConsumer, ,)
+			})
+
+			Device (CH00)
+			{
+				Name (_ADR, 0)
+
+				Device (QS00)
+				{
+					Name (_HID, "PRP0001")
+        				Name (_DSD, Package() {
+                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     		     Package () {
+						     Package () { "compatible", "nxp,pca9548" },
+                	     		     }
+					})
+
+					Name (_CRS, ResourceTemplate () {
+					     I2cSerialBus (0x71,
+					     ControllerInitiated, 400000,
+					     AddressingMode7Bit, "\\_SB.PCI0.SBUS.MUX0.CH00", 0x00,
+					     ResourceConsumer, ,)
+					     })
+				}
+			}
+
+			Device (CH01)
+			{
+				Name (_ADR, 1)
+
+				Device (QS10)
+				{
+					Name (_HID, "PRP0001")
+        				Name (_DSD, Package() {
+                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     		     Package () {
+						     Package () { "compatible", "nxp,pca9548" },
+                	     		     }
+					})
+
+					Name (_CRS, ResourceTemplate () {
+					     I2cSerialBus (0x71,
+					     ControllerInitiated, 400000,
+					     AddressingMode7Bit, "\\_SB.PCI0.SBUS.MUX0.CH01", 0x00,
+					     ResourceConsumer,,)
+					})
+				}
+			}
+
+			Device (CH02)
+			{
+				Name (_ADR, 2)
+
+				Device (QS20)
+				{
+					Name (_HID, "PRP0001")
+        				Name (_DSD, Package() {
+                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     		     Package () {
+						     Package () { "compatible", "nxp,pca9548" },
+                	     		     }
+					})
+
+					Name (_CRS, ResourceTemplate () {
+					     I2cSerialBus (0x71,
+					     ControllerInitiated, 400000,
+					     AddressingMode7Bit, "\\_SB.PCI0.SBUS.MUX0.CH02", 0x00,
+					     ResourceConsumer,,)
+					})
+				}
+			}
+
+			Device (CH03)
+			{
+				Name (_ADR, 3)
+
+				Device (QS30)
+				{
+					Name (_HID, "PRP0001")
+        				Name (_DSD, Package() {
+                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     		     Package () {
+						     Package () { "compatible", "nxp,pca9548" },
+                	     		     }
+					})
+
+					Name (_CRS, ResourceTemplate () {
+					     I2cSerialBus (0x71,
+					     ControllerInitiated, 400000,
+					     AddressingMode7Bit, "\\_SB.PCI0.SBUS.MUX0.CH03", 0x00,
+					     ResourceConsumer,,)
+					})
+				}
+			}
+
+			Device (CH04)
+			{
+				Name (_ADR, 4)
+
+				Device (QS40)
+				{
+					Name (_HID, "PRP0001")
+        				Name (_DSD, Package() {
+                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     		     Package () {
+						     Package () { "compatible", "nxp,pca9555" },
+                	     		     }
+					})
+
+					Name (_CRS, ResourceTemplate () {
+					     I2cSerialBus (0x20,
+					     ControllerInitiated, 400000,
+					     AddressingMode7Bit, "\\_SB.PCI0.SBUS.MUX0.CH04", 0x00,
+					     ResourceConsumer,,)
+					})
+				}
+
+				Device (QS41)
+				{
+					Name (_HID, "PRP0001")
+        				Name (_DSD, Package() {
+                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     		     Package () {
+						     Package () { "compatible", "nxp,pca9555" },
+                	     		     }
+					})
+
+					Name (_CRS, ResourceTemplate () {
+					     I2cSerialBus (0x21,
+					     ControllerInitiated, 400000,
+					     AddressingMode7Bit, "\\_SB.PCI0.SBUS.MUX0.CH04", 0x00,
+					     ResourceConsumer,,)
+					})
+				}
+
+				Device (QS42)
+				{
+					Name (_HID, "PRP0001")
+        				Name (_DSD, Package() {
+                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     		     Package () {
+						     Package () { "compatible", "nxp,pca9555" },
+                	     		     }
+					})
+
+					Name (_CRS, ResourceTemplate () {
+					     I2cSerialBus (0x22,
+					     ControllerInitiated, 400000,
+					     AddressingMode7Bit, "\\_SB.PCI0.SBUS.MUX0.CH04", 0x00,
+					     ResourceConsumer,,)
+					})
+				}
+
+				Device (QS43)
+				{
+					Name (_HID, "PRP0001")
+        				Name (_DSD, Package() {
+                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     		     Package () {
+						     Package () { "compatible", "nxp,pca9555" },
+                	     		     }
+					})
+
+					Name (_CRS, ResourceTemplate () {
+					     I2cSerialBus (0x23,
+					     ControllerInitiated, 400000,
+					     AddressingMode7Bit, "\\_SB.PCI0.SBUS.MUX0.CH04", 0x00,
+					     ResourceConsumer,,)
+					})
+				}
+			}
+
+			Device (CH05)
+			{
+				Name (_ADR, 5)
+
+				Device (QS40)
+				{
+					Name (_HID, "PRP0001")
+        				Name (_DSD, Package() {
+                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     		     Package () {
+						     Package () { "compatible", "nxp,pca9555" },
+                	     		     }
+					})
+
+					Name (_CRS, ResourceTemplate () {
+					     I2cSerialBus (0x20,
+					     ControllerInitiated, 400000,
+					     AddressingMode7Bit, "\\_SB.PCI0.SBUS.MUX0.CH05", 0x00,
+					     ResourceConsumer,,)
+					})
+				}
+
+				Device (QS41)
+				{
+					Name (_HID, "PRP0001")
+        				Name (_DSD, Package() {
+                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     		     Package () {
+						     Package () { "compatible", "nxp,pca9555" },
+                	     		     }
+					})
+
+					Name (_CRS, ResourceTemplate () {
+					     I2cSerialBus (0x21,
+					     ControllerInitiated, 400000,
+					     AddressingMode7Bit, "\\_SB.PCI0.SBUS.MUX0.CH05", 0x00,
+					     ResourceConsumer,,)
+					})
+				}
+
+				Device (QS42)
+				{
+					Name (_HID, "PRP0001")
+        				Name (_DSD, Package() {
+                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     		     Package () {
+						     Package () { "compatible", "nxp,pca9555" },
+                	     		     }
+					})
+
+					Name (_CRS, ResourceTemplate () {
+					     I2cSerialBus (0x22,
+					     ControllerInitiated, 400000,
+					     AddressingMode7Bit, "\\_SB.PCI0.SBUS.MUX0.CH05", 0x00,
+					     ResourceConsumer,,)
+					})
+				}
+
+				Device (QS43)
+				{
+					Name (_HID, "PRP0001")
+        				Name (_DSD, Package() {
+                	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     		     Package () {
+						     Package () { "compatible", "nxp,pca9555" },
+                	     		     }
+					})
+
+					Name (_CRS, ResourceTemplate () {
+					     I2cSerialBus (0x23,
+					     ControllerInitiated, 400000,
+					     AddressingMode7Bit, "\\_SB.PCI0.SBUS.MUX0.CH05", 0x00,
+					     ResourceConsumer,,)
+					})
+				}
+			}
+
+		}
+		Device (GPIO)
+		{
+			Name (_HID, "PRP0001")
+        		Name (_DSD, Package() {
+                	     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                	     Package () {
+                             	     Package () { "compatible", "nxp,pca9539" },
+                	     }
+        		})
+        		Name (_CRS, ResourceTemplate ()
+			{
+				I2cSerialBus (0x74, ControllerInitiated,
+					400000, AddressingMode7Bit,
+                                	"\\_SB.PCI0.SBUS", 0x00,
+                                	ResourceConsumer, ,)
+               		})
+		}
+	}
 }
