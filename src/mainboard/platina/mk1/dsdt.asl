@@ -2007,4 +2007,58 @@ DefinitionBlock(
                		})
 		}
 	}
+
+	Scope (\_SB.PCI0.BR3A)
+	{
+		Device (TMHK)
+		{
+			Name (_ADR, 0x00000000)
+			Method (_STA, 0, NotSerialized)
+			{
+				Return (0xf)
+			}
+			Name (_DSD, Package()
+			{
+				ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+				Package () {
+					Package() { "foo", "1234" },
+					Package() { "reset-gpios", Package() {
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G00R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G01R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G02R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G03R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G04R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G05R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G06R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G07R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G08R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G09R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G10R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G11R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G12R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G13R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G14R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS42.G15R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G16R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G17R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G18R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G19R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G20R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G21R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G22R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G23R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G24R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G25R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G26R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G27R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G28R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G29R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G30R,
+						  \_SB.PCI0.SBUS.MUX0.CH05.QS43.G31R,
+						  }
+					}
+				}
+			})
+		}
+	}
 }
