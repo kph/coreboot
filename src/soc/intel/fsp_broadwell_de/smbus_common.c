@@ -55,6 +55,24 @@ static int smbus_wait_until_done(u16 smbus_base)
 	return loops ? 0 : -1;
 }
 
+static int smbus_wait_until_byte_done(u16 smbus_base)
+{
+	unsigned int loops = SMBUS_TIMEOUT;
+	unsigned char byte;
+	do {
+		smbus_delay();
+		if (--loops == 0)
+			break;
+		byte = inb(smbus_base + SMBHSTSTAT);
+		printk(BIOS_INFO, "%s: SMBHSTSTAT = %x\n",
+		       __func__, byte);
+		if (byte & 0x80) {
+			return 0;
+		}
+	} while ((byte & 1) || (byte & ~((1 << 6) | (1 << 0))) == 0);
+	return -1;
+}
+
 int do_smbus_read_byte(unsigned int smbus_base, unsigned int device, unsigned int address)
 {
 	unsigned char global_status_register;
@@ -95,6 +113,56 @@ int do_smbus_read_byte(unsigned int smbus_base, unsigned int device, unsigned in
 
 	/* Read results of transaction */
 	byte = inb(smbus_base + SMBHSTDAT0);
+	if (global_status_register != (1 << 1)) {
+		return SMBUS_ERROR;
+	}
+	return byte;
+}
+
+int do_smbus_recv_byte(unsigned int smbus_base, unsigned int device)
+{
+	unsigned char global_status_register;
+	unsigned char byte;
+
+	if (smbus_wait_until_ready(smbus_base) < 0) {
+		return SMBUS_WAIT_UNTIL_READY_TIMEOUT;
+	}
+	/* Setup transaction */
+	/* Disable interrupts */
+	outb(inb(smbus_base + SMBHSTCTL) & (~1), smbus_base + SMBHSTCTL);
+	/* Set the device I'm talking to */
+	outb(((device & 0x7f) << 1) | 1, smbus_base + SMBXMITADD);
+	/* Set up for i2c_block_data */
+	outb((inb(smbus_base + SMBHSTCTL) & 0x83) | (0x6 << 2) |
+	     (1 << 5),
+	     (smbus_base + SMBHSTCTL));
+
+	/* Clear any lingering errors, so the transaction will run */
+	outb(inb(smbus_base + SMBHSTSTAT), smbus_base + SMBHSTSTAT);
+
+	/* Start the command */
+	outb((inb(smbus_base + SMBHSTCTL) | 0x40),
+	     smbus_base + SMBHSTCTL);
+
+	/* Poll for transaction completion */
+	if (smbus_wait_until_byte_done(smbus_base) < 0) {
+		printk(BIOS_INFO, "%s: wait_until_byte_done timeout\n",
+		       __func__);
+		return SMBUS_WAIT_UNTIL_DONE_TIMEOUT;
+	}
+
+	global_status_register = inb(smbus_base + SMBHSTSTAT);
+	printk(BIOS_INFO, "%s: global_status_register %x\n",
+	       __func__, global_status_register);
+	/* Ignore the "In Use" status... */
+	global_status_register &= ~(7 << 5);
+
+	/* Read results of transaction */
+	byte = inb(smbus_base + SMBBLKDAT);
+
+	/* signal SMBBLKDAT ready */
+	outb(0x80, smbus_base + SMBHSTSTAT);
+
 	if (global_status_register != (1 << 1)) {
 		return SMBUS_ERROR;
 	}
