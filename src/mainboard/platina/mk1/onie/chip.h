@@ -22,6 +22,8 @@ struct mainboard_platina_mk1_onie_config {
 	struct acpi_dp property_list[4];	/* Must match devicetree.cb property_count */
 	int regs_count;
 	uint64_t regs_list[2];			/* Must match devicetree.cb property_count */
+	int onie_count;
+	struct acpi_dp onie_list[1];		/* Must match devicetree.cb property_count */
 };
 
 #endif /* __PLATINA_MK1_ONIE_H__ */

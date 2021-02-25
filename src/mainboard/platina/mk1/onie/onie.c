@@ -51,16 +51,18 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 			struct mainboard_platina_mk1_onie_config *config)
 {
 	int err;
-	const char *scope = "\\_SB.PCI0.SBUS";
+	const char *sb_scope = "\\_SB";
+	const char *sbus_scope = "\\_SB.PCI0.SBUS";
 	struct acpi_i2c i2c = {
 		.address = dev->path.i2c.device,
 		.mode_10bit = dev->path.i2c.mode_10bit,
 		.speed = I2C_SPEED_FAST,
-		.resource = scope,
+		.resource = sbus_scope,
 	};
 	struct acpi_dp *dsd = NULL;
 	struct acpi_dp *nvrg = NULL;
-
+	struct acpi_dp *nvmem_cell_names = NULL;
+	
 	printk(BIOS_INFO, "%s: enabled %d\n",
 	       __func__, dev->enabled);
 
@@ -77,7 +79,7 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 	}
 
 	/* Device */
-	acpigen_write_scope(scope);
+	acpigen_write_scope(sbus_scope);
 	acpigen_write_device(acpi_device_name(dev));
 	acpigen_write_name_string("_HID", "INT3499");
 	acpigen_write_name_integer("_UID", 0);
@@ -111,6 +113,26 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 
 	acpigen_pop_len(); /* Device */
 	acpigen_pop_len(); /* Scope */
+
+	/* Device */
+	acpigen_write_scope(sb_scope);
+	acpigen_write_device("ONIE");
+	acpigen_write_name_string("_HID", "PRP0001");
+	dsd = acpi_dp_new_table("_DSD");
+	acpi_dp_add_property_list(dsd, config->onie_list,
+				  config->onie_count);
+
+	acpi_dp_add_reference(dsd, "nvmem-cells", "\\_SB.PCI0.SBUS.NVM0");
+	nvmem_cell_names = acpi_dp_new_table("nvmem-cell-names");
+	acpi_dp_add_string(nvmem_cell_names, NULL, "onie-data");
+	
+	acpi_dp_add_array(dsd, nvmem_cell_names);
+
+	acpi_dp_write(dsd);
+	
+	acpigen_pop_len(); /* Device */
+	acpigen_pop_len(); /* Scope */
+
 	printk(BIOS_INFO, "%s: wrote ACPI tables\n", dev_path(dev));
 }
 
