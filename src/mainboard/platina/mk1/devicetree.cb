@@ -11,7 +11,7 @@ chip soc/intel/fsp_broadwell_de
 		device pci 1f.2 on end # SATA Controller
 		device pci 1f.3 on     # SMBus Controller
 		       chip mainboard/platina/mk1/onie
-		       	    register "property_count" = "5"
+		       	    register "property_count" = "4"
 		       	    register "property_list[0].type" = "ACPI_DP_TYPE_INTEGER"
 			    register "property_list[0].name" = ""size""
 			    register "property_list[0].integer" = "16384"
@@ -24,9 +24,9 @@ chip soc/intel/fsp_broadwell_de
 		       	    register "property_list[3].type" = "ACPI_DP_TYPE_INTEGER"
 			    register "property_list[3].name" = ""address-width""
 			    register "property_list[3].integer" = "16"
-		       	    register "property_list[4].type" = "ACPI_DP_TYPE_CHILD"
-			    register "property_list[4].name" = ""onie-data""
-			    register "property_list[4].string" = ""NVRG""
+			    register "regs_count" = "2"
+			    register "regs_list[0]" = "0x0"
+			    register "regs_list[1]" = "0x0800"
 			    device i2c 53 on end	       # Probe new address first
 		       	    device i2c 51 on end
 		       end

@@ -59,6 +59,7 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 		.resource = scope,
 	};
 	struct acpi_dp *dsd = NULL;
+	struct acpi_dp *nvrg = NULL;
 
 	printk(BIOS_INFO, "%s: enabled %d\n",
 	       __func__, dev->enabled);
@@ -91,12 +92,16 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 	acpigen_write_resourcetemplate_footer();
 
 	if (1) {
+		nvrg = acpi_dp_new_table("NVRG");
+		acpi_dp_add_integer_array(nvrg, "reg", config->regs_list,
+					  config->regs_count);
 		dsd = acpi_dp_new_table("_DSD");
 //		if (config->compat_string)
 //			acpi_dp_add_string(dsd, "compatible", "platina-mk1");
 		/* Add generic property list */
 		acpi_dp_add_property_list(dsd, config->property_list,
 					  config->property_count);
+		acpi_dp_add_child(dsd, "onie-data", nvrg);
 		acpi_dp_write(dsd);
 	}
 
