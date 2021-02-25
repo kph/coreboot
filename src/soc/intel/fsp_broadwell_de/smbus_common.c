@@ -55,6 +55,7 @@ static int smbus_wait_until_done(u16 smbus_base)
 	return loops ? 0 : -1;
 }
 
+#if 0
 static int smbus_wait_until_byte_done(u16 smbus_base)
 {
 	unsigned int loops = SMBUS_TIMEOUT;
@@ -72,6 +73,7 @@ static int smbus_wait_until_byte_done(u16 smbus_base)
 	} while ((byte & 1) || (byte & ~((1 << 6) | (1 << 0))) == 0);
 	return -1;
 }
+#endif
 
 int do_smbus_read_byte(unsigned int smbus_base, unsigned int device, unsigned int address)
 {
@@ -133,7 +135,7 @@ int do_smbus_recv_byte(unsigned int smbus_base, unsigned int device)
 	/* Set the device I'm talking to */
 	outb(((device & 0x7f) << 1) | 1, smbus_base + SMBXMITADD);
 	/* Set up for i2c_block_data */
-	outb((inb(smbus_base + SMBHSTCTL) & 0x83) | (0x6 << 2) |
+	outb((inb(smbus_base + SMBHSTCTL) & 0x83) | (0x1 << 2) |
 	     (1 << 5),
 	     (smbus_base + SMBHSTCTL));
 
@@ -145,7 +147,7 @@ int do_smbus_recv_byte(unsigned int smbus_base, unsigned int device)
 	     smbus_base + SMBHSTCTL);
 
 	/* Poll for transaction completion */
-	if (smbus_wait_until_byte_done(smbus_base) < 0) {
+	if (smbus_wait_until_ready(smbus_base) < 0) {
 		printk(BIOS_INFO, "%s: wait_until_byte_done timeout\n",
 		       __func__);
 		return SMBUS_WAIT_UNTIL_DONE_TIMEOUT;
@@ -158,10 +160,10 @@ int do_smbus_recv_byte(unsigned int smbus_base, unsigned int device)
 	global_status_register &= ~(7 << 5);
 
 	/* Read results of transaction */
-	byte = inb(smbus_base + SMBBLKDAT);
+	byte = inb(smbus_base + SMBHSTDAT0);
 
 	/* signal SMBBLKDAT ready */
-	outb(0x80, smbus_base + SMBHSTSTAT);
+//	outb(0x80, smbus_base + SMBHSTSTAT);
 
 	if (global_status_register != (1 << 1)) {
 		return SMBUS_ERROR;
