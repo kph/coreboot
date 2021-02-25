@@ -31,6 +31,11 @@ static void onie_init(struct device *dev)
 	err = smbus_write_byte(dev, 0, 0);
 	printk(BIOS_INFO, "%s: smbus_write_byte select address returned %d\n",
 		       __func__, err);
+	if (err < 0) {
+		printk(BIOS_INFO, "%s: probe of %s failed\n",
+		       __func__, dev_path(dev));
+		return;
+	}
 
 	for (i = 0; i < 32; i++) {
 		data = smbus_recv_byte(dev);
@@ -45,6 +50,8 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 			void (*callback)(struct device *dev),
 			struct mainboard_platina_mk1_onie_config *config)
 {
+	int err;
+	
 	const char *scope = acpi_device_scope(dev);
 	struct acpi_i2c i2c = {
 		.address = dev->path.i2c.device,
@@ -55,8 +62,22 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 	struct acpi_dp *dsd = NULL;
 	const char *path = acpi_device_path(dev);
 
-	if (!dev->enabled || !scope)
+	if (!dev->enabled || !scope) {
+		printk(BIOS_INFO, "%s: enabled %d scope %s\n",
+		       __func__, dev->enabled, scope);
 		return;
+	}
+
+	printk(BIOS_INFO, "%s: probing scope %s\n",
+	       __func__, scope);
+	
+	err = smbus_write_byte(dev, 0, 0);
+	if (err < 0) {
+		printk(BIOS_INFO, "%s: probe of %s failed\n",
+		       __func__, dev_path(dev));
+		dev->enabled = 0;
+		return;
+	}
 
 	/* Device */
 	acpigen_write_scope(scope);
@@ -121,17 +142,6 @@ static struct device_operations platina_mk1_onie_ops = {
 
 static void platina_mk1_onie_enable(struct device *dev)
 {
-	int err;
-	
-	
-	err = smbus_write_byte(dev, 0, 0);
-	if (err < 0) {
-		printk(BIOS_INFO, "%s: probe of %s failed\n",
-		       __func__, dev_path(dev));
-		dev->enabled = 0;
-		return;
-	}
-
 	printk(BIOS_INFO, "%s: enabling %s\n", __func__, dev_path(dev));
 
 	dev->ops = &platina_mk1_onie_ops;
