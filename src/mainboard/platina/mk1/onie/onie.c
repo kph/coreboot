@@ -51,8 +51,7 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 			struct mainboard_platina_mk1_onie_config *config)
 {
 	int err;
-	
-	const char *scope = acpi_device_scope(dev);
+	const char *scope = "\\_SB.PCI0.SBUS";
 	struct acpi_i2c i2c = {
 		.address = dev->path.i2c.device,
 		.mode_10bit = dev->path.i2c.mode_10bit,
@@ -60,16 +59,13 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 		.resource = scope,
 	};
 	struct acpi_dp *dsd = NULL;
-	const char *path = acpi_device_path(dev);
 
-	if (!dev->enabled || !scope) {
-		printk(BIOS_INFO, "%s: enabled %d scope %s\n",
-		       __func__, dev->enabled, scope);
+	printk(BIOS_INFO, "%s: enabled %d\n",
+	       __func__, dev->enabled);
+
+	if (!dev->enabled) {
 		return;
 	}
-
-	printk(BIOS_INFO, "%s: probing scope %s\n",
-	       __func__, scope);
 	
 	err = smbus_write_byte(dev, 0, 0);
 	if (err < 0) {
@@ -110,7 +106,7 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 
 	acpigen_pop_len(); /* Device */
 	acpigen_pop_len(); /* Scope */
-	printk(BIOS_INFO, "%s: %s\n", path, dev_path(dev));
+	printk(BIOS_INFO, "%s: wrote ACPI tables\n", dev_path(dev));
 }
 
 static void platina_mk1_onie_fill_ssdt_generator(struct device *dev)
