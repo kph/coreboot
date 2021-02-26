@@ -232,7 +232,6 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 			void (*callback)(struct device *dev),
 			struct mainboard_platina_mk1_onie_config *config)
 {
-	int err;
 	const char *sb_scope = "\\_SB";
 	const char *sbus_scope = "\\_SB.PCI0.SBUS";
 	struct acpi_i2c i2c = {
@@ -255,13 +254,6 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 	       acpi_device_scope(dev), dev->enabled);
 
 	
-	err = smbus_write_byte(dev, 0, 0);
-	if (err < 0) {
-		printk(BIOS_INFO, "%s: %s failed\n",
-		       __func__, dev_path(dev));
-		return;
-	}
-
 	/* Device */
 	acpigen_write_scope(sbus_scope);
 	acpigen_write_device(acpi_device_name(dev));
