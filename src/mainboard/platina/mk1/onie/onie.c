@@ -45,6 +45,16 @@ static void onie_init(struct device *dev)
 }
 
 #if CONFIG(HAVE_ACPI_TABLES)
+/* Use name specified in config or build one from I2C address */
+static const char *platina_mk1_onie_acpi_name(const struct device *dev)
+{
+	static char name[5];
+
+	snprintf(name, sizeof(name), "D%03.3X", dev->path.i2c.device);
+	name[4] = '\0';
+	printk(BIOS_INFO, "%s: returning %s\n", __func__, name);
+	return name;
+}
 
 static void platina_mk1_onie_fill_ssdt(struct device *dev,
 			void (*callback)(struct device *dev),
@@ -62,9 +72,11 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 	struct acpi_dp *dsd = NULL;
 	struct acpi_dp *nvrg = NULL;
 	struct acpi_dp *nvmem_cell_names = NULL;
+	char name[DEVICE_PATH_MAX];
 	
-	printk(BIOS_INFO, "%s: enabled %d\n",
-	       __func__, dev->enabled);
+	printk(BIOS_INFO, "%s: dev_path %s acpi_device_path %s scope %s enabled %d\n",
+	       __func__, dev_path(dev), acpi_device_path(dev),
+	       acpi_device_scope(dev), dev->enabled);
 
 	if (!dev->enabled) {
 		return;
@@ -122,7 +134,9 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 	acpi_dp_add_property_list(dsd, config->onie_list,
 				  config->onie_count);
 
-	acpi_dp_add_reference(dsd, "nvmem-cells", "\\_SB.PCI0.SBUS.NVM0");
+	snprintf(name, DEVICE_PATH_MAX, "%s.%s", sbus_scope,
+		 platina_mk1_onie_acpi_name(dev));
+	acpi_dp_add_reference(dsd, "nvmem-cells", name);
 	nvmem_cell_names = acpi_dp_new_table("nvmem-cell-names");
 	acpi_dp_add_string(nvmem_cell_names, NULL, "onie-data");
 	
@@ -141,15 +155,6 @@ static void platina_mk1_onie_fill_ssdt_generator(struct device *dev)
 	platina_mk1_onie_fill_ssdt(dev, NULL, dev->chip_info);
 }
 
-/* Use name specified in config or build one from I2C address */
-static const char *platina_mk1_onie_acpi_name(const struct device *dev)
-{
-	static char name[5];
-
-	snprintf(name, sizeof(name), "D%03.3X", dev->path.i2c.device);
-	name[4] = '\0';
-	return name;
-}
 #endif
 
 static struct device_operations platina_mk1_onie_ops = {
