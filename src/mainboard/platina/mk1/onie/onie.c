@@ -20,28 +20,113 @@
 #include <device/smbus.h>
 #include <stdint.h>
 #include <string.h>
+#include <commonlib/endian.h>
 #include "mainboard/platina/mk1/onie/chip.h"
+
+enum onie_max {
+	onie_max_data	= 2048,
+	onie_max_tlv	=  255,
+};
+
+#define ONIE_HEADER_ID	"TlvInfo"
+
+static const char onie_header_id[] = ONIE_HEADER_ID;
+
+enum { onie_header_version = 1 };
+
+enum onie_sz {
+	onie_sz_header_id	= sizeof(ONIE_HEADER_ID),
+	onie_sz_header_version	= sizeof(u8),
+	onie_sz_header_length	= sizeof(u16),
+	onie_sz_header		= onie_sz_header_id + onie_sz_header_version +
+		onie_sz_header_length,
+	onie_sz_tlv_type	= sizeof(u8),
+	onie_sz_tlv_length	= sizeof(u8),
+	onie_sz_crc		= sizeof(u32),
+	onie_sz_mac		= 6,
+};
+
+struct __attribute__((packed)) onie_header {
+	u8	id[onie_sz_header_id];
+	u8	version;
+	u8	length[onie_sz_header_length];
+};
+
+struct onie_tlv {
+	u8 t;
+	u8 l;
+	u8 v[];
+};
+
+struct __attribute__((packed)) onie_data {
+	struct onie_header header;
+	struct onie_tlv tlv;
+};
+
+static u32
+onie_crc(u32 crc, unsigned char const *p, size_t len)
+{
+	int i;
+	while (len--) {
+		crc ^= *p++;
+		for (i = 0; i < 8; i++)
+			crc = (crc >> 1) ^ ((crc & 1) ? 0xedb88320 : 0);
+	}
+
+	return crc;
+}
 
 static void onie_init(struct device *dev)
 {
 	int i;
 	int err;
 	int data;
+	static unsigned char buf[onie_max_data];
+	struct onie_header *h = (struct onie_header *)buf;
+	size_t tlvsz, fullsz, crcsz;
+	u32 crc_read, crc_calc;
 	
 	err = smbus_write_byte(dev, 0, 0);
 	printk(BIOS_INFO, "%s: smbus_write_byte select address returned %d\n",
-		       __func__, err);
+	       __func__, err);
 	if (err < 0) {
 		printk(BIOS_INFO, "%s: probe of %s failed\n",
 		       __func__, dev_path(dev));
 		return;
 	}
 
-	for (i = 0; i < 32; i++) {
+	for (i = 0; i < onie_max_data; i++) {
 		data = smbus_recv_byte(dev);
-		printk(BIOS_INFO, "%s: offset %d returned %02x\n",
-		       __func__, i, data);
+		if (data < 0) {
+			printk(BIOS_INFO, "%s: offset %d returned %02x\n",
+			       __func__, i, data);
+			return;
+		}
+		buf[i] = data;
 	}
+
+	if (strcmp(onie_header_id, (char *)buf)) {
+		printk(BIOS_INFO, "%s: header ID is %s\n",
+		       __func__, buf);
+		return;
+	}
+	if (h->version != onie_header_version) {
+		printk(BIOS_INFO, "%s: header version is %d\n",
+		       __func__, h->version);
+		return;
+	};
+	tlvsz = read_be16(&h->length);
+	fullsz = sizeof(*h) + tlvsz;
+	if (fullsz > onie_max_data) {
+		printk(BIOS_INFO, "%s: too much data %zu\n",
+		       __func__, fullsz);
+		return;
+	}
+	crcsz = fullsz - onie_sz_crc;
+	crc_read = read_be32(&buf[crcsz]);
+	crc_calc = ~onie_crc(~0, buf, crcsz);	
+	printk(BIOS_INFO, "%s crc read %x calc %x\n",
+	       __func__, crc_read, crc_calc);
 }
 
 #if CONFIG(HAVE_ACPI_TABLES)
