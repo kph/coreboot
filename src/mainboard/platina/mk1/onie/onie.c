@@ -94,7 +94,13 @@ static void onie_init(struct device *dev)
 	u32 crc_read, crc_calc;
 	u8 *end;
 	struct onie_tlv *tlv;
-
+	static bool found = 0;
+	
+	if (!dev->enabled || found) {
+		dev->enabled = 0;
+		return;
+	}
+	
 	err = smbus_write_byte(dev, 0, 0);
 	printk(BIOS_INFO, "%s: smbus_write_byte select address returned %d\n",
 	       __func__, err);
@@ -104,6 +110,8 @@ static void onie_init(struct device *dev)
 		return;
 	}
 
+	found = 1;
+	
 	for (i = 0; i < onie_max_data; i++) {
 		data = smbus_recv_byte(dev);
 		if (data < 0) {
@@ -180,19 +188,19 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 	struct acpi_dp *nvmem_cell_names = NULL;
 	char name[DEVICE_PATH_MAX];
 	
+	if (!dev->enabled) {
+		return;
+	}
+
 	printk(BIOS_INFO, "%s: dev_path %s acpi_device_path %s scope %s enabled %d\n",
 	       __func__, dev_path(dev), acpi_device_path(dev),
 	       acpi_device_scope(dev), dev->enabled);
 
-	if (!dev->enabled) {
-		return;
-	}
 	
 	err = smbus_write_byte(dev, 0, 0);
 	if (err < 0) {
-		printk(BIOS_INFO, "%s: probe of %s failed\n",
+		printk(BIOS_INFO, "%s: %s failed\n",
 		       __func__, dev_path(dev));
-		dev->enabled = 0;
 		return;
 	}
 
