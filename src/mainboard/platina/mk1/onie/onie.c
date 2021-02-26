@@ -76,16 +76,25 @@ onie_crc(u32 crc, unsigned char const *p, size_t len)
 	return crc;
 }
 
+static struct onie_tlv *onie_next(struct onie_tlv *tlv)
+{
+	return (struct onie_tlv *)((u8*)tlv +
+				   sizeof(struct onie_tlv) +
+				   tlv->l);
+}
+
 static void onie_init(struct device *dev)
 {
 	int i;
 	int err;
 	int data;
-	static unsigned char buf[onie_max_data];
-	struct onie_header *h = (struct onie_header *)buf;
+	static u8 buf[onie_max_data];
+	struct onie_data *od = (struct onie_data *)buf;
 	size_t tlvsz, fullsz, crcsz;
 	u32 crc_read, crc_calc;
-	
+	u8 *end;
+	struct onie_tlv *tlv;
+
 	err = smbus_write_byte(dev, 0, 0);
 	printk(BIOS_INFO, "%s: smbus_write_byte select address returned %d\n",
 	       __func__, err);
@@ -110,13 +119,13 @@ static void onie_init(struct device *dev)
 		       __func__, buf);
 		return;
 	}
-	if (h->version != onie_header_version) {
+	if (od->header.version != onie_header_version) {
 		printk(BIOS_INFO, "%s: header version is %d\n",
-		       __func__, h->version);
+		       __func__, od->header.version);
 		return;
 	};
-	tlvsz = read_be16(&h->length);
-	fullsz = sizeof(*h) + tlvsz;
+	tlvsz = read_be16(&od->header.length);
+	fullsz = sizeof(struct onie_header) + tlvsz;
 	if (fullsz > onie_max_data) {
 		printk(BIOS_INFO, "%s: too much data %zu\n",
 		       __func__, fullsz);
@@ -125,8 +134,20 @@ static void onie_init(struct device *dev)
 	crcsz = fullsz - onie_sz_crc;
 	crc_read = read_be32(&buf[crcsz]);
 	crc_calc = ~onie_crc(~0, buf, crcsz);	
-	printk(BIOS_INFO, "%s crc read %x calc %x\n",
-	       __func__, crc_read, crc_calc);
+	if (crc_read != crc_calc) {
+		printk(BIOS_INFO, "%s crc read %x calc %x\n",
+		       __func__, crc_read, crc_calc);
+		return;
+	}
+	end = buf + sizeof(struct onie_header) + tlvsz;
+	for (tlv = &od->tlv; (u8 *)tlv < end; tlv = onie_next(tlv)) {
+		if ((u8 *)tlv + tlv->l > end) {
+			printk(BIOS_INFO, "%s: tlv exceeds end",
+			       __func__);
+			return;
+		}
+		printk(BIOS_INFO, "%s: tlv %x len %d\n", __func__, tlv->t, tlv->l);
+	}
 }
 
 #if CONFIG(HAVE_ACPI_TABLES)
