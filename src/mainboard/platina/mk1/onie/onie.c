@@ -63,6 +63,28 @@ struct __attribute__((packed)) onie_data {
 	struct onie_tlv tlv;
 };
 
+enum onie_type {
+	onie_type_nvmem_name		= 0x11,
+	onie_type_nvmem_cache		= 0x12,
+	onie_type_product_name		= 0x21,
+	onie_type_part_number		= 0x22,
+	onie_type_serial_number		= 0x23,
+	onie_type_mac_base		= 0x24,
+	onie_type_manufacture_date	= 0x25,
+	onie_type_device_version	= 0x26,
+	onie_type_label_revision	= 0x27,
+	onie_type_platform_name		= 0x28,
+	onie_type_onie_version		= 0x29,
+	onie_type_num_macs		= 0x2a,
+	onie_type_manufacturer		= 0x2b,
+	onie_type_country_code		= 0x2c,
+	onie_type_vendor		= 0x2d,
+	onie_type_diag_version		= 0x2e,
+	onie_type_service_tag		= 0x2f,
+	onie_type_vendor_extension	= 0xfd,
+	onie_type_crc			= 0xfe,
+};
+
 static u32
 onie_crc(u32 crc, unsigned char const *p, size_t len)
 {
@@ -83,6 +105,13 @@ static struct onie_tlv *onie_next(struct onie_tlv *tlv)
 				   tlv->l);
 }
 
+static bool has_prefix(const char *pfx, const char *attr)
+{
+	size_t len = strlen(pfx);
+
+	return strncmp(pfx, attr, len) == 0;
+}
+
 static void onie_init(struct device *dev)
 {
 	int i;
@@ -95,6 +124,9 @@ static void onie_init(struct device *dev)
 	u8 *end;
 	struct onie_tlv *tlv;
 	static bool found = 0;
+	bool is_platina = 0;
+	bool part_known = 0;
+	int version = 0;
 	
 	if (!dev->enabled || found) {
 		dev->enabled = 0;
@@ -154,8 +186,34 @@ static void onie_init(struct device *dev)
 			       __func__);
 			return;
 		}
+		switch (tlv->t) {
+		case onie_type_vendor:
+			if (has_prefix("Platina", (char *)tlv->v)) {
+				is_platina = 1;
+			}
+			break;
+
+		case onie_type_part_number:
+			if (has_prefix("BT77O759.00", (char *)tlv->v) ||
+			    has_prefix("PS-3001-32C", (char *)tlv->v) ||
+			    has_prefix("PSW-3001-32C", (char *)tlv->v)) {
+				part_known = 1;
+			}
+			break;
+
+		case onie_type_device_version:
+			if (tlv->l != 1) {
+				printk(BIOS_INFO, "%s: version length is %d\n",
+				       __func__, tlv->l);
+				continue;
+			}
+			version = *(u8 *)tlv->v;
+			break;
+		}
 		printk(BIOS_INFO, "%s: tlv %x len %d\n", __func__, tlv->t, tlv->l);
 	}
+	printk(BIOS_INFO, "%s: is_platina %d part_known %d version %d\n",
+	       __func__, is_platina, part_known, version);
 }
 
 #if CONFIG(HAVE_ACPI_TABLES)
