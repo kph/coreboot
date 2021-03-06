@@ -323,6 +323,7 @@ DefinitionBlock(
                 	     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
                 	     Package () {
                              	     Package () { "compatible", "nxp,pca9548" },
+				     Package () { "i2c-mux-idle-disconnect", "" },
                 	     }
         		})
         		Name (_CRS, ResourceTemplate()
@@ -344,6 +345,7 @@ DefinitionBlock(
                 	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
                 	     		     Package () {
 						     Package () { "compatible", "nxp,pca9548" },
+						     Package () { "i2c-mux-idle-disconnect", "" },
                 	     		     }
 					})
 
@@ -367,6 +369,7 @@ DefinitionBlock(
                 	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
                 	     		     Package () {
 						     Package () { "compatible", "nxp,pca9548" },
+						     Package () { "i2c-mux-idle-disconnect", "" },
                 	     		     }
 					})
 
@@ -390,6 +393,7 @@ DefinitionBlock(
                 	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
                 	     		     Package () {
 						     Package () { "compatible", "nxp,pca9548" },
+						     Package () { "i2c-mux-idle-disconnect", "" },
                 	     		     }
 					})
 
@@ -413,6 +417,7 @@ DefinitionBlock(
                 	     		     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
                 	     		     Package () {
 						     Package () { "compatible", "nxp,pca9548" },
+						     Package () { "i2c-mux-idle-disconnect", "" },
                 	     		     }
 					})
 
