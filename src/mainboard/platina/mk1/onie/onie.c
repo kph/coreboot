@@ -85,6 +85,7 @@ enum onie_type {
 	onie_type_crc			= 0xfe,
 };
 
+static struct device *onie_dev;
 static u8 platina_version;
 static bool is_platina;
 static bool is_known_model;
@@ -219,6 +220,7 @@ static void onie_init(struct device *dev)
 	 */
 
 	found = 1;
+	onie_dev = dev;
 
 	/* Errors after this are not I/O errors, so the part is good.
 	 * At this point if we find any errors, it is a programming
@@ -419,6 +421,9 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 		acpi_dp_add_reference(linktab, NULL, "\\_SB.PCI0.BR2C.IXG0");
 		acpi_dp_add_reference(linktab, NULL, "\\_SB.PCI0.BR2C.IXG1");
 		acpi_dp_add_array(dsd, linktab);
+
+		acpi_dp_add_integer(dsd, "onie-i2c-addr",
+				    onie_dev->path.i2c.device);
 
 		acpigen_write_resourcetemplate_footer();
 
