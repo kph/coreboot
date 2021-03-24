@@ -316,7 +316,7 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 		.resource = sbus_scope,
 	};
 	struct acpi_dp *dsd, *nvrg, *nvmem_cells, *nvmem_cell_names;
-	struct acpi_dp *linktab;
+	struct acpi_dp *linktab, *qsfp_addrs;
 	char name[DEVICE_PATH_MAX];
 
 	if (!dev->enabled) {
@@ -422,8 +422,12 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 		acpi_dp_add_reference(linktab, NULL, "\\_SB.PCI0.BR2C.IXG1");
 		acpi_dp_add_array(dsd, linktab);
 
-		acpi_dp_add_integer(dsd, "onie-i2c-addr",
-				    onie_dev->path.i2c.device);
+		qsfp_addrs = acpi_dp_new_table("qsfp-i2c-addrs");
+		acpi_dp_add_integer(qsfp_addrs, NULL, 0x50);
+		if (onie_dev->path.i2c.device != 0x51) {
+			acpi_dp_add_integer(qsfp_addrs, NULL, 0x51);
+		}
+		acpi_dp_add_array(dsd, qsfp_addrs);
 
 		acpigen_write_resourcetemplate_footer();
 
