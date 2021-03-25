@@ -326,7 +326,7 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 		.resource = sbus_scope,
 	};
 	struct acpi_dp *dsd, *nvrg, *nvmem_cells, *nvmem_cell_names;
-	struct acpi_dp *qsfp_addrs, *linktab, *mactab;
+	struct acpi_dp *qsfp_addrs, *linktab;
 	char name[DEVICE_PATH_MAX];
 	int i, j;
 
@@ -428,19 +428,19 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 			       ACPI_GPIO_ACTIVE_LOW);
 
 		acpi_dp_add_integer(dsd, "link-count", 2);
+
 		linktab = acpi_dp_new_table("links");
 		acpi_dp_add_reference(linktab, NULL, "\\_SB.PCI0.BR2C.IXG0");
 		acpi_dp_add_reference(linktab, NULL, "\\_SB.PCI0.BR2C.IXG1");
 		acpi_dp_add_array(dsd, linktab);
+
 		linktab = acpi_dp_new_table("link-mac-addresses");
 		for (i = 0; i < 2; i++) {
-			mactab = acpi_dp_new_table(NULL);
 			for (j = 0; j < 6; j++) {
-				acpi_dp_add_integer(mactab, NULL,
+				acpi_dp_add_integer(linktab, NULL,
 						    base_mac[j] +
 						    (j == 5 ? i + 2 : 0));
 			}
-			acpi_dp_add_array(linktab, mactab);
 		}
 		acpi_dp_add_array(dsd, linktab);
 
