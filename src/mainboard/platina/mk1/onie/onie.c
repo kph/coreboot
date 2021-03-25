@@ -85,6 +85,8 @@ enum onie_type {
 	onie_type_crc			= 0xfe,
 };
 
+#define LINKADDR_MAX_LEN 20		/* linkNNN-mac-address<nul> */
+
 static struct device *onie_dev;
 static u8 platina_version;
 static bool is_platina;
@@ -327,7 +329,7 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 	};
 	struct acpi_dp *dsd, *nvrg, *nvmem_cells, *nvmem_cell_names;
 	struct acpi_dp *qsfp_addrs, *linktab;
-	char name[DEVICE_PATH_MAX];
+	char name[DEVICE_PATH_MAX], *linkaddr;
 	int i, j;
 
 	if (!dev->enabled) {
@@ -434,15 +436,18 @@ static void platina_mk1_onie_fill_ssdt(struct device *dev,
 		acpi_dp_add_reference(linktab, NULL, "\\_SB.PCI0.BR2C.IXG1");
 		acpi_dp_add_array(dsd, linktab);
 
-		linktab = acpi_dp_new_table("link-mac-addresses");
 		for (i = 0; i < 2; i++) {
+			linkaddr = malloc(LINKADDR_MAX_LEN);
+			snprintf(linkaddr, LINKADDR_MAX_LEN,
+				 "link%d-mac-address", i);
+			linktab = acpi_dp_new_table(linkaddr);
 			for (j = 0; j < 6; j++) {
 				acpi_dp_add_integer(linktab, NULL,
 						    base_mac[j] +
 						    (j == 5 ? i + 2 : 0));
 			}
+			acpi_dp_add_array(dsd, linktab);
 		}
-		acpi_dp_add_array(dsd, linktab);
 
 		qsfp_addrs = acpi_dp_new_table("qsfp-i2c-addrs");
 		acpi_dp_add_integer(qsfp_addrs, NULL, 0x50);
